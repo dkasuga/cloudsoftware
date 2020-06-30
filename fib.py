@@ -6,36 +6,13 @@ import math
 from matplotlib import pyplot as plt
 
 import numpy as np
+import os.path
 
 def fib(n):
     if n == 0 or n == 1:
         return 1
     else:
         return fib(n-1)+fib(n-2)
-
-def plot(record, file_name="img.png", sec_scale="mill"):
-    fig = plt.figure()
-    if sec_scale == "mill":
-        scale = 1000.0
-    else:
-        scale = 1.0
-
-    n = record["n"]
-    mean = record["mean"] * scale
-    median = record["median"] * scale
-    std = record["std"] * scale
-    plt.plot(n, mean)
-    plt.fill_between(n, (mean-std), (mean+std), alpha=0.4, color="g")
-    print(mean-std)
-    print(mean+std)
-
-    plt.legend()
-    plt.xlabel("n of fibonacci")
-    plt.ylabel("time [ms]")
-    plt.ylim(0.0, 0.1)
-    fig.savefig(file_name)
-
-
 
 def compute_statistics(timelist):
     mean = statistics.mean(timelist)
@@ -55,17 +32,20 @@ if __name__ == '__main__':
 
     parser.add_argument("--trials", type=int, default=10)
     parser.add_argument("--max_n", type=int, default=35)
+    parser.add_argument("--file_name", type=str, default="fib")
+    parser.add_argument("--output_dir", type=str, default="out/")
 
     args = parser.parse_args()
     trials = args.trials
     max_n = args.max_n
-    scale = 1000.0
+    output_dir = args.output_dir
+    file_name = args.file_name
+    output_file_name = os.path.join(output_dir, file_name)
 
-    record = {}
-    record["n"] = []
-    record["mean"] = []
-    record["median"] = []
-    record["std"] = []
+    n_list = []
+    mean_list = []
+    median_list = []
+    std_list = []
 
     for n in range(1, max_n):
         timelist = []
@@ -73,15 +53,15 @@ if __name__ == '__main__':
             t = measure_time(n)
             timelist.append(t)
         mean, median, std = compute_statistics(timelist)
-        record["n"].append(n)
-        record["mean"].append(mean)
-        record["median"].append(median)
-        record["std"].append(std)
+        n_list.append(n)
+        mean_list.append(mean)
+        median_list.append(median)
+        std_list.append(std)
 
-    print(record)
-    record["n"] = np.asarray(record["n"])
-    record["mean"] = np.asarray(record["mean"])
-    record["median"] = np.asarray(record["median"])
-    record["std"] = np.asarray(record["std"])
-    plot(record, file_name="fib_graph.png", sec_scale="no")
+    n_np = np.asarray(n_list)
+    mean_np = np.asarray(mean_list)
+    median_np = np.asarray(median_list)
+    std_np = np.asarray(std_list)
+    np.savez(output_file_name, n=n_np, mean=mean_np, median=median_np, std=std_np)
+    # plot(record, file_name="fib_graph.png", sec_scale="no")
 
