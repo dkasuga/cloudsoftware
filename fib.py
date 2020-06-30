@@ -32,14 +32,15 @@ if __name__ == '__main__':
 
     parser.add_argument("--trials", type=int, default=10)
     parser.add_argument("--max_n", type=int, default=35)
-    parser.add_argument("--file_name", type=str, default="fib")
-    parser.add_argument("--output_dir", type=str, default="out/")
+    parser.add_argument("--process", type=str, default="fib")
+    parser.add_argument("--output_dir", type=str, default="out")
+    parser.add_argument("--env", type=str, default="linux")
 
     args = parser.parse_args()
     trials = args.trials
     max_n = args.max_n
     output_dir = args.output_dir
-    file_name = args.file_name
+    file_name = args.process + "_" + args.env
     output_file_name = os.path.join(output_dir, file_name)
 
     n_list = []
@@ -62,6 +63,7 @@ if __name__ == '__main__':
     mean_np = np.asarray(mean_list)
     median_np = np.asarray(median_list)
     std_np = np.asarray(std_list)
-    np.savez(output_file_name, n=n_np, mean=mean_np, median=median_np, std=std_np)
+    label_np = np.array([file_name])
+    np.savez(output_file_name, n=n_np, mean=mean_np, median=median_np, std=std_np, label=label_np)
     # plot(record, file_name="fib_graph.png", sec_scale="no")
 
