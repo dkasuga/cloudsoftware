@@ -48,7 +48,7 @@ if __name__ == '__main__':
     sec_scale = args.sec_scale
 
     record = []
-    files = glob.glob("out/image_**.npz")
+    files = glob.glob("out/image_*.npz")
     for file in files:
         print(file)
         record.append(np.load(file))

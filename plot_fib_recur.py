@@ -1,11 +1,13 @@
 #-*- using utf-8 -*-
 import time
+import os
 import argparse
 import statistics
 import math
 from matplotlib import pyplot as plt
 
 import numpy as np
+import glob
 
 def plot(record, file_name="img.png", sec_scale="mill"):
     fig = plt.figure()
@@ -44,11 +46,13 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     sec_scale = args.sec_scale
-    fib_linux_npz = np.load("out/fib_dp_linux.npz")
-    fib_virtual_npz = np.load("out/fib_dp_vir.npz")
-    record = []
-    record.append(fib_linux_npz)
-    record.append(fib_virtual_npz)
 
-    plot(record, file_name="fib_graph.png", sec_scale=sec_scale)
+    record = []
+    files = glob.glob("out/fib_recur_*.npz")
+    for file in files:
+        print(file)
+        record.append(np.load(file))
+
+    plot(record, file_name="fig/fib_recur_graph.png", sec_scale=sec_scale)
+    os.system("xdg-open fig/fib_recur_graph.png")
 

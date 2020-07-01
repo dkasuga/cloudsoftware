@@ -44,11 +44,15 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     sec_scale = args.sec_scale
-    fib_linux_npz = np.load("out/fib_linux.npz")
-    fib_virtual_npz = np.load("out/fib_vir.npz")
-    record = []
-    record.append(fib_linux_npz)
-    record.append(fib_virtual_npz)
+    fib_linux_npz = np.load("out/fib_dp_linux.npz")
+    fib_virtual_npz = np.load("out/fib_dp_vir.npz")
 
-    plot(record, file_name="fib_graph.png", sec_scale=sec_scale)
+    record = []
+    files = glob.glob("out/fib_recur_*.npz")
+    for file in files:
+        print(file)
+        record.append(np.load(file))
+
+    plot(record, file_name="fig/fib_dp_graph.png", sec_scale=sec_scale)
+    os.system("xdg-open fig/fib_dp_graph.png")
 
