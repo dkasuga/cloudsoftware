@@ -34,7 +34,7 @@ def plot(record, file_name="img.png", sec_scale="mill"):
         print("###################")
 
     plt.legend()
-    plt.xlabel("n of fibonacci")
+    plt.xlabel("nums of files")
     plt.ylabel("time" + sec_unit)
     fig.savefig(file_name)
 
