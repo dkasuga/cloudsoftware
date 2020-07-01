@@ -63,5 +63,3 @@ if __name__ == '__main__':
     std_np = np.asarray(std_list)
     label_np = np.array([file_name])
     np.savez(output_file_name, n=n_np, mean=mean_np, median=median_np, std=std_np, label=label_np)
-    # plot(record, file_name="fib_graph.png", sec_scale="no")
-

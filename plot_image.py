@@ -1,11 +1,13 @@
 #-*- using utf-8 -*-
 import time
+import os
 import argparse
 import statistics
 import math
 from matplotlib import pyplot as plt
 
 import numpy as np
+import glob
 
 def plot(record, file_name="img.png", sec_scale="mill"):
     fig = plt.figure()
@@ -26,7 +28,7 @@ def plot(record, file_name="img.png", sec_scale="mill"):
         std = data["std"] * scale
         label = data["label"][0]
         plt.plot(n, mean, label=label)
-        plt.fill_between(n, (mean-std), (mean+std), alpha=0.4, color="g")
+        plt.fill_between(n, (mean-std), (mean+std), alpha=0.4)
         print(label)
         print(mean[-1])
         print("###################")
@@ -44,11 +46,13 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     sec_scale = args.sec_scale
-    image_linux_npz = np.load("out/image_linux.npz")
-    #image_virtual_npz = np.load("out/image_vir.npz")
-    record = []
-    record.append(image_linux_npz)
-    #record.append(fib_virtual_npz)
 
-    plot(record, file_name="fib_graph.png", sec_scale=sec_scale)
+    record = []
+    files = glob.glob("out/image_**.npz")
+    for file in files:
+        print(file)
+        record.append(np.load(file))
+
+    plot(record, file_name="fig/image_graph.png", sec_scale=sec_scale)
+    os.system("xdg-open fig/image_graph.png")
 
